@@ -26,7 +26,3 @@
 *.exe
 *.out
 *.app
-
-# Build directory
-/build-DBtest-unknown-Debug
-/build-updateDemo-unknown-Debug

@@ -15,10 +15,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_action_O_triggered()
-{
-}
-
 void MainWindow::on_action_C_triggered()
 {
     this->close();
