@@ -15,9 +15,13 @@ class MainWindow : public QMainWindow
         explicit MainWindow(QWidget *parent = 0);
         ~MainWindow();
 
+    private:
+        void            connectDB();
+
     private slots:
         void            slotOkClicked();
         void            slotCancelClicked();
+        void            slotOpenFile();
 
     private:
         Ui::MainWindow *ui;

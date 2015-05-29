@@ -100,7 +100,7 @@
           <widget class="QLineEdit" name="leUploadFile"/>
          </item>
          <item>
-          <widget class="QToolButton" name="btnOpenFIle">
+          <widget class="QToolButton" name="openBtn">
            <property name="text">
             <string>...</string>
            </property>
