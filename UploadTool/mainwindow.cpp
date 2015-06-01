@@ -1,36 +1,59 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QSqlRecord>
-#include <QSqlError>
 #include <QDialog>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QProgressBar>
+#include <QThread>
+
+#include "uploadworker.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    mUploadWorker(NULL)
 {
+    mUploadWorker = new UploadWorker();
     ui->setupUi(this);
     ui->progressBar->hide();
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(slotOkClicked()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(slotCancelClicked()));
     connect(ui->openBtn, SIGNAL(clicked()), this, SLOT(slotOpenFile()));
+    connect(mUploadWorker, SIGNAL(progress(int)), this, SLOT(handleProgressChanged(int)));
+    connect(mUploadWorker, SIGNAL(uploadFailed(int)), this, SLOT(handleProgressChanged(int)));
+    //connect(mUploadWorker, &QUploadWorker::finished, mUploadWorker, &QObject::deleteLater);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    if(!mUploadWorker)
+    {
+        delete mUploadWorker;
+        mUploadWorker = NULL;
+    }
 }
 
 void MainWindow::slotOkClicked()
 {
-    this->connectDB();
-    ui->progressBar->show();
+    if (QMessageBox::Yes == QMessageBox::warning(this,
+                                                  tr("您确定要上传该版本吗？"),
+                                                  tr("请问您是否确定要上传该版本文件至服务器？"),
+                                                  QMessageBox::Yes | QMessageBox::No,
+                                                  QMessageBox::Yes)) {
+        mUploadWorker->setVersionNo(ui->leVersionNo->text());
+        mUploadWorker->setVersionDesc(ui->leVersionDesc->toHtml());
+        mUploadWorker->setUploadUser(ui->leUploader->text());
+        mUploadWorker->setFileName(ui->leUploadFile->text());
+        mUploadWorker->start();
+        ui->progressBar->show();
+    }
 }
 
 void MainWindow::slotCancelClicked()
 {
+    mUploadWorker->stop();
     ui->leVersionNo->clear();
     ui->leVersionDesc->clear();
     ui->leUploader->clear();
@@ -40,27 +63,30 @@ void MainWindow::slotCancelClicked()
 
 void MainWindow::slotOpenFile()
 {
-    qDebug() << "xxx";
-    QDialog* dialog = new QDialog(this);
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
-    dialog->setWindowTitle("请选择文件");
-    dialog->exec();
+    QString path = QFileDialog::getOpenFileName(this, tr("请选择上传文件"), ".", tr("Zip File(*.zip)"));
+    if(path.length() == 0) {
+            //QMessageBox::information(NULL, tr("选择文件"), tr("您还未选择任何文件"));
+    } else {
+            //QMessageBox::information(NULL, tr("选择文件"), tr("您选择的文件是： ") + path);
+        ui->leUploadFile->setText(path);
+    }
 }
 
-void MainWindow::connectDB()
+void MainWindow::handleProgressChanged(int value)
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QOCI");
-    db.setDatabaseName("orcl");
-    db.setPort(1521);
-    db.setHostName("127.0.0.1");
-    db.setUserName("scott");
-    db.setPassword("tiger");
-    if (db.open())
+    if(value == -1)
     {
-        qDebug() << "Database connected.";
-    }else{
-        qDebug() << db.lastError().text();
+        ui->progressBar->setValue(0);
+        ui->progressBar->hide();
     }
-    db.close();
+    else if(value > 0)
+    {
+        ui->progressBar->setValue(value);
+    }
+    if(value == 100)
+    {
+       ui->progressBar->hide();
+    }
 }
+
 

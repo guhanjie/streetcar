@@ -54,7 +54,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(400, 309);
+        MainWindow->resize(600, 450);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -97,6 +97,7 @@ public:
 
         leVersionDesc = new QTextEdit(frame);
         leVersionDesc->setObjectName(QStringLiteral("leVersionDesc"));
+        leVersionDesc->setTextInteractionFlags(Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextEditable|Qt::TextEditorInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse);
 
         gridLayout_2->addWidget(leVersionDesc, 1, 1, 1, 1);
 
@@ -154,7 +155,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 400, 28));
+        menuBar->setGeometry(QRect(0, 0, 600, 28));
         MainWindow->setMenuBar(menuBar);
 
         retranslateUi(MainWindow);
@@ -169,9 +170,11 @@ public:
 #ifndef QT_NO_TOOLTIP
         leVersionNo->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>\347\211\210\346\234\254\345\217\267\346\240\274\345\274\217\345\246\202\357\274\2321.0.0.0</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
-        leVersionNo->setPlaceholderText(QApplication::translate("MainWindow", "1.0.0.0", 0));
+        leVersionNo->setPlaceholderText(QApplication::translate("MainWindow", "\350\257\267\345\241\253\345\206\231\345\220\210\351\200\202\347\232\204\347\211\210\346\234\254\345\217\267\357\274\214\345\246\2021.0.0.0", 0));
         lblVersionDesc->setText(QApplication::translate("MainWindow", "\347\211\210\346\234\254\346\217\217\350\277\260", 0));
+        leVersionDesc->setPlaceholderText(QApplication::translate("MainWindow", "\350\277\231\351\207\214\345\217\257\344\273\245\345\241\253\345\206\231\345\205\263\344\272\216\346\255\244\347\211\210\346\234\254\347\232\204\350\257\246\347\273\206\346\217\217\350\277\260", 0));
         lblUploader->setText(QApplication::translate("MainWindow", "\344\270\212\344\274\240\350\200\205", 0));
+        leUploader->setPlaceholderText(QApplication::translate("MainWindow", "\350\257\267\345\241\253\345\206\231\344\270\212\344\274\240\350\200\205\345\247\223\345\220\215", 0));
         lblUploadFile->setText(QApplication::translate("MainWindow", "\344\270\212\344\274\240\346\226\207\344\273\266", 0));
         openBtn->setText(QApplication::translate("MainWindow", "...", 0));
     } // retranslateUi

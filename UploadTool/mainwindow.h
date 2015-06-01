@@ -7,6 +7,8 @@ namespace Ui {
     class MainWindow;
 }
 
+class UploadWorker;
+
 class MainWindow : public QMainWindow
 {
         Q_OBJECT
@@ -15,17 +17,15 @@ class MainWindow : public QMainWindow
         explicit MainWindow(QWidget *parent = 0);
         ~MainWindow();
 
-    private:
-        void            connectDB();
-
     private slots:
         void            slotOkClicked();
         void            slotCancelClicked();
         void            slotOpenFile();
+        void            handleProgressChanged(int value);
 
     private:
         Ui::MainWindow *ui;
-
+        UploadWorker *mUploadWorker;
 };
 
 #endif // MAINWINDOW_H

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>309</height>
+    <width>600</width>
+    <height>450</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -53,7 +53,7 @@
           <number>15</number>
          </property>
          <property name="placeholderText">
-          <string>1.0.0.0</string>
+          <string>请填写合适的版本号，如1.0.0.0</string>
          </property>
          <property name="clearButtonEnabled">
           <bool>true</bool>
@@ -71,7 +71,14 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QTextEdit" name="leVersionDesc"/>
+        <widget class="QTextEdit" name="leVersionDesc">
+         <property name="textInteractionFlags">
+          <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextEditable|Qt::TextEditorInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+         </property>
+         <property name="placeholderText">
+          <string>这里可以填写关于此版本的详细描述</string>
+         </property>
+        </widget>
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="lblUploader">
@@ -82,6 +89,9 @@
        </item>
        <item row="2" column="1">
         <widget class="QLineEdit" name="leUploader">
+         <property name="placeholderText">
+          <string>请填写上传者姓名</string>
+         </property>
          <property name="clearButtonEnabled">
           <bool>true</bool>
          </property>
@@ -142,7 +152,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>600</width>
      <height>28</height>
     </rect>
    </property>

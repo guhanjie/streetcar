@@ -14,9 +14,33 @@
 
 using namespace std;
 
+//class DbOperGroup
+//{
+//    public:
+//        DbOperGroup();
+//};
+
+//DbOperGroup::DbOperGroup()
+//{
+//        QSqlDatabase db = QSqlDatabase::addDatabase("QOCI");
+//        db.setDatabaseName("orcl");
+//        db.setPort(1521);
+//        db.setHostName("127.0.0.1");
+//        db.setUserName("scott");
+//        db.setPassword("tiger");
+//        if (db.open())
+//        {
+//            qDebug() << "Database connected.";
+//        }else{
+//            qDebug() << db.lastError().text();
+//        }
+//}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
+
+    DbOperGroup operGroup;
 
     //测试数据库是否连接正常
     QSqlDatabase db = QSqlDatabase::addDatabase("QOCI");
