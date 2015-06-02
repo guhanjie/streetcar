@@ -40,8 +40,6 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    DbOperGroup operGroup;
-
     //测试数据库是否连接正常
     QSqlDatabase db = QSqlDatabase::addDatabase("QOCI");
     db.setDatabaseName("orcl");

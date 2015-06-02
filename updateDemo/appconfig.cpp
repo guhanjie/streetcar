@@ -14,6 +14,7 @@ AppConfig& AppConfig::getInstance()
     {
         instance = new AppConfig();
         QSettings settings("./config.ini", QSettings::IniFormat);
+        instance->versionNo = settings.value("Version/No", "1.0.0.0").toString();
         instance->dbDriverName = settings.value("Database/dbDriverName", "QOCI").toString();
         instance->dbName = settings.value("Database/dbName", "orcl").toString();
         instance->dbServerPort = settings.value("Database/dbServerPort", "1521").toInt();
@@ -22,6 +23,11 @@ AppConfig& AppConfig::getInstance()
         instance->passwd = settings.value("Database/passwd", "tiger").toString();
     }
     return *instance;
+}
+
+QString AppConfig::getVersionNo() const
+{
+    return versionNo;
 }
 
 QString AppConfig::getDbDriverName() const

@@ -1,0 +1,10 @@
+[Database]
+dbDriverName=QOCI
+dbName=orcl
+dbServerPort=1521
+dbServerIp=127.0.0.1
+userName=scott
+passwd=tiger
+
+[Version]
+No=1.0.0.15
