@@ -14,9 +14,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    uploadworker.cpp
+    uploadworker.cpp \
+    appconfig.cpp \
+    dbutils.cpp
 
 HEADERS  += mainwindow.h \
-    uploadworker.h
+    uploadworker.h \
+    appconfig.h \
+    dbutils.h
 
 FORMS    += mainwindow.ui

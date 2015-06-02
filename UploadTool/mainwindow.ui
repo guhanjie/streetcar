@@ -53,7 +53,7 @@
           <number>15</number>
          </property>
          <property name="placeholderText">
-          <string>请填写合适的版本号，如1.0.0.0</string>
+          <string>请填写合适的版本号，如：1.0.0.0 </string>
          </property>
          <property name="clearButtonEnabled">
           <bool>true</bool>

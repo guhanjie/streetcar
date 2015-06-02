@@ -22,6 +22,9 @@ class MainWindow : public QMainWindow
         void            slotCancelClicked();
         void            slotOpenFile();
         void            handleProgressChanged(int value);
+        void            slotInfoDialog(const QString & title, const QString & text);
+        void            slotWarningDialog(const QString & title, const QString & text);
+        void            slotCriticalDialog(const QString & title, const QString & text);
 
     private:
         Ui::MainWindow *ui;
