@@ -50,11 +50,15 @@ OBJECTS_DIR   = ./
 
 SOURCES       = main.cpp \
 		mainwindow.cpp \
-		uploadworker.cpp moc_mainwindow.cpp \
+		uploadworker.cpp \
+		appconfig.cpp \
+		dbutils.cpp moc_mainwindow.cpp \
 		moc_uploadworker.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		uploadworker.o \
+		appconfig.o \
+		dbutils.o \
 		moc_mainwindow.o \
 		moc_uploadworker.o
 DIST          = /usr/lib/i386-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -116,9 +120,13 @@ DIST          = /usr/lib/i386-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/i386-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/i386-linux-gnu/qt5/mkspecs/features/lex.prf \
 		UploadTool.pro mainwindow.h \
-		uploadworker.h main.cpp \
+		uploadworker.h \
+		appconfig.h \
+		dbutils.h main.cpp \
 		mainwindow.cpp \
-		uploadworker.cpp
+		uploadworker.cpp \
+		appconfig.cpp \
+		dbutils.cpp
 QMAKE_TARGET  = UploadTool
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = UploadTool
@@ -290,8 +298,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h uploadworker.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp mainwindow.cpp uploadworker.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.h uploadworker.h appconfig.h dbutils.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp mainwindow.cpp uploadworker.cpp appconfig.cpp dbutils.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
 
@@ -347,11 +355,20 @@ main.o: main.cpp mainwindow.h
 
 mainwindow.o: mainwindow.cpp mainwindow.h \
 		ui_mainwindow.h \
+		dbutils.h \
 		uploadworker.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
-uploadworker.o: uploadworker.cpp uploadworker.h
+uploadworker.o: uploadworker.cpp appconfig.h \
+		uploadworker.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o uploadworker.o uploadworker.cpp
+
+appconfig.o: appconfig.cpp appconfig.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o appconfig.o appconfig.cpp
+
+dbutils.o: dbutils.cpp appconfig.h \
+		dbutils.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dbutils.o dbutils.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

@@ -8,10 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    connect(ui->pushButton, SIGNAL(clicked()), this, SIGNAL(buttonClicked()));
-    connect(this, SIGNAL(buttonClicked()), this, SLOT(onButtonClicked()));
-    QSettings settings("MySoft", "Star Runner");
-    settings.setValue("user", "guhanjie");
+    QSettings settings("./config.ini", QSettings::IniFormat);
 }
 
 MainWindow::~MainWindow()

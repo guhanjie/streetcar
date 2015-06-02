@@ -28,19 +28,14 @@ class UploadWorker : public QThread
     signals:
         void         progress(int value);
         void         uploadFailed(int value);
+        void         infoUpDialog(const QString & title, const QString & text);
+        void         warningUpDialog(const QString & title, const QString & text);
+        void         criticalUpDialog(const QString & title, const QString & text);
 
     public slots:
 
     private:
         bool            cancel;
-
-        //数据库相关配置项
-        QString       dbDriverName;
-        QString       dbName;
-        int               dbServerPort;
-        QString       dbServerIp;
-        QString       userName;
-        QString       passwd;
 
         QString       versionNo;
         QString       versionDesc;
