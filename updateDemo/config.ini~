@@ -7,4 +7,8 @@ userName=scott
 passwd=tiger
 
 [Version]
-No=1.0.0.15
+<<<<<<< HEAD
+No=1.0.0.17
+=======
+No=1.0.0.1
+>>>>>>> 6a6f769f3ed86f3edd28f1ff959b9a8c7eaab171
