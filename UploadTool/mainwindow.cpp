@@ -60,7 +60,7 @@ void MainWindow::slotOkClicked()
     QString versionNo = ui->leVersionNo->text();
     QString versionDesc = ui->leVersionDesc->toHtml();
     QString uploadUser = ui->leUploader->text();
-    QString fileName = ui->leUploader->text();
+    QString fileName = ui->leUploadFile->text();
     //使用正则表达式验证用户输入的版本号是否合法
     QRegExp rx("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
     if( !rx.exactMatch(versionNo) )
@@ -76,6 +76,7 @@ void MainWindow::slotOkClicked()
     QFile file(fileName);
     if( !file.exists() )
     {
+        qDebug() << "file["+fileName+"] not found.";
         QMessageBox::warning(this, "输入有误", "您选择的文件不存在，请选择正确的文件", QMessageBox::Ok);
         return;
     }
@@ -123,6 +124,7 @@ void MainWindow::handleProgressChanged(int value)
     }
     else
     {
+        qDebug() << value;
         ui->progressBar->setValue(value);
     }
 }

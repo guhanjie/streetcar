@@ -89,7 +89,7 @@ void UploadWorker::run()
             qint64 gotSize = 0;
             while (!fis.atEnd())
             {
-                emit progress(gotSize*100 / fileSize /100);
+                emit progress(gotSize*100 / fileSize);
                 if(this->cancel)
                 {
                     qDebug() << "Canceling to insert the new record by user, database will be rollback...";

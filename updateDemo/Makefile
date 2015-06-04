@@ -15,7 +15,7 @@ CXX           = g++
 DEFINES       = -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIE $(DEFINES)
 CXXFLAGS      = -pipe -g -Wall -W -D_REENTRANT -fPIE $(DEFINES)
-INCPATH       = -I. -isystem /usr/include/i386-linux-gnu/qt5 -isystem /usr/include/i386-linux-gnu/qt5/QtWidgets -isystem /usr/include/i386-linux-gnu/qt5/QtGui -isystem /usr/include/i386-linux-gnu/qt5/QtSql -isystem /usr/include/i386-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++
+INCPATH       = -I. -I. -isystem /usr/include/i386-linux-gnu/qt5 -isystem /usr/include/i386-linux-gnu/qt5/QtWidgets -isystem /usr/include/i386-linux-gnu/qt5/QtGui -isystem /usr/include/i386-linux-gnu/qt5/QtSql -isystem /usr/include/i386-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++
 QMAKE         = /usr/lib/i386-linux-gnu/qt5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -35,8 +35,8 @@ COMPRESS      = gzip -9f
 DISTNAME      = updateDemo1.0.0
 DISTDIR = /home/guhanjie/Workspace/streetcar/updateDemo/.tmp/updateDemo1.0.0
 LINK          = g++
-LFLAGS        = 
-LIBS          = $(SUBLIBS) -lQt5Widgets -lQt5Gui -lQt5Sql -lQt5Core -lGL -lpthread 
+LFLAGS        = -Wl,-rpath=/home/guhanjie/Workspace/streetcar/updateDemo/
+LIBS          = $(SUBLIBS) -L/home/guhanjie/Workspace/streetcar/updateDemo/ -lquazip -lqsqloci -lQt5Widgets -lQt5Gui -lQt5Sql -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -51,12 +51,24 @@ OBJECTS_DIR   = ./
 SOURCES       = main.cpp \
 		mainwindow.cpp \
 		appconfig.cpp \
-		dbutils.cpp moc_mainwindow.cpp
+		dbutils.cpp \
+		waitingdialog.cpp \
+		loadingdialog.cpp qrc_resources.cpp \
+		moc_mainwindow.cpp \
+		moc_waitingdialog.cpp \
+		moc_loadingdialog.cpp \
+		moc_quazipfile.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		appconfig.o \
 		dbutils.o \
-		moc_mainwindow.o
+		waitingdialog.o \
+		loadingdialog.o \
+		qrc_resources.o \
+		moc_mainwindow.o \
+		moc_waitingdialog.o \
+		moc_loadingdialog.o \
+		moc_quazipfile.o
 DIST          = /usr/lib/i386-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/i386-linux-gnu/qt5/mkspecs/common/shell-unix.conf \
 		/usr/lib/i386-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -117,10 +129,17 @@ DIST          = /usr/lib/i386-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/i386-linux-gnu/qt5/mkspecs/features/lex.prf \
 		updateDemo.pro mainwindow.h \
 		appconfig.h \
-		dbutils.h main.cpp \
+		dbutils.h \
+		waitingdialog.h \
+		loadingdialog.h \
+		quazip.h \
+		ui_mainwindow.h \
+		quazipfile.h main.cpp \
 		mainwindow.cpp \
 		appconfig.cpp \
-		dbutils.cpp
+		dbutils.cpp \
+		waitingdialog.cpp \
+		loadingdialog.cpp
 QMAKE_TARGET  = updateDemo
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = updateDemo
@@ -210,6 +229,7 @@ Makefile: updateDemo.pro /usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++/qmake.con
 		/usr/lib/i386-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/i386-linux-gnu/qt5/mkspecs/features/lex.prf \
 		updateDemo.pro \
+		resources.qrc \
 		/usr/lib/i386-linux-gnu/libQt5Widgets.prl \
 		/usr/lib/i386-linux-gnu/libQt5Gui.prl \
 		/usr/lib/i386-linux-gnu/libQt5Core.prl \
@@ -274,6 +294,7 @@ Makefile: updateDemo.pro /usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++/qmake.con
 /usr/lib/i386-linux-gnu/qt5/mkspecs/features/yacc.prf:
 /usr/lib/i386-linux-gnu/qt5/mkspecs/features/lex.prf:
 updateDemo.pro:
+resources.qrc:
 /usr/lib/i386-linux-gnu/libQt5Widgets.prl:
 /usr/lib/i386-linux-gnu/libQt5Gui.prl:
 /usr/lib/i386-linux-gnu/libQt5Core.prl:
@@ -292,8 +313,9 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h appconfig.h dbutils.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp mainwindow.cpp appconfig.cpp dbutils.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents resources.qrc $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.h appconfig.h dbutils.h waitingdialog.h loadingdialog.h quazip.h ui_mainwindow.h quazipfile.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp mainwindow.cpp appconfig.cpp dbutils.cpp waitingdialog.cpp loadingdialog.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
 
@@ -315,13 +337,34 @@ mocables: compiler_moc_header_make_all compiler_moc_source_make_all
 
 check: first
 
-compiler_rcc_make_all:
+compiler_rcc_make_all: qrc_resources.cpp
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_mainwindow.cpp
+	-$(DEL_FILE) qrc_resources.cpp
+qrc_resources.cpp: resources.qrc \
+		images/update.ico
+	/usr/lib/i386-linux-gnu/qt5/bin/rcc -name resources resources.qrc -o qrc_resources.cpp
+
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_waitingdialog.cpp moc_loadingdialog.cpp moc_quazipfile.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_waitingdialog.cpp moc_loadingdialog.cpp moc_quazipfile.cpp
 moc_mainwindow.cpp: mainwindow.h
-	/usr/lib/i386-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -I/home/guhanjie/Workspace/streetcar/updateDemo -I/usr/include/i386-linux-gnu/qt5 -I/usr/include/i386-linux-gnu/qt5/QtWidgets -I/usr/include/i386-linux-gnu/qt5/QtGui -I/usr/include/i386-linux-gnu/qt5/QtSql -I/usr/include/i386-linux-gnu/qt5/QtCore -I/usr/include/c++/4.9 -I/usr/include/i386-linux-gnu/c++/4.9 -I/usr/include/c++/4.9/backward -I/usr/lib/gcc/i686-linux-gnu/4.9/include -I/usr/local/include -I/usr/lib/gcc/i686-linux-gnu/4.9/include-fixed -I/usr/include/i386-linux-gnu -I/usr/include mainwindow.h -o moc_mainwindow.cpp
+	/usr/lib/i386-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -I/home/guhanjie/Workspace/streetcar/updateDemo -I/home/guhanjie/Workspace/streetcar/updateDemo -I/usr/include/i386-linux-gnu/qt5 -I/usr/include/i386-linux-gnu/qt5/QtWidgets -I/usr/include/i386-linux-gnu/qt5/QtGui -I/usr/include/i386-linux-gnu/qt5/QtSql -I/usr/include/i386-linux-gnu/qt5/QtCore -I/usr/include/c++/4.9 -I/usr/include/i386-linux-gnu/c++/4.9 -I/usr/include/c++/4.9/backward -I/usr/lib/gcc/i686-linux-gnu/4.9/include -I/usr/local/include -I/usr/lib/gcc/i686-linux-gnu/4.9/include-fixed -I/usr/include/i386-linux-gnu -I/usr/include mainwindow.h -o moc_mainwindow.cpp
+
+moc_waitingdialog.cpp: waitingdialog.h
+	/usr/lib/i386-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -I/home/guhanjie/Workspace/streetcar/updateDemo -I/home/guhanjie/Workspace/streetcar/updateDemo -I/usr/include/i386-linux-gnu/qt5 -I/usr/include/i386-linux-gnu/qt5/QtWidgets -I/usr/include/i386-linux-gnu/qt5/QtGui -I/usr/include/i386-linux-gnu/qt5/QtSql -I/usr/include/i386-linux-gnu/qt5/QtCore -I/usr/include/c++/4.9 -I/usr/include/i386-linux-gnu/c++/4.9 -I/usr/include/c++/4.9/backward -I/usr/lib/gcc/i686-linux-gnu/4.9/include -I/usr/local/include -I/usr/lib/gcc/i686-linux-gnu/4.9/include-fixed -I/usr/include/i386-linux-gnu -I/usr/include waitingdialog.h -o moc_waitingdialog.cpp
+
+moc_loadingdialog.cpp: loadingdialog.h
+	/usr/lib/i386-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -I/home/guhanjie/Workspace/streetcar/updateDemo -I/home/guhanjie/Workspace/streetcar/updateDemo -I/usr/include/i386-linux-gnu/qt5 -I/usr/include/i386-linux-gnu/qt5/QtWidgets -I/usr/include/i386-linux-gnu/qt5/QtGui -I/usr/include/i386-linux-gnu/qt5/QtSql -I/usr/include/i386-linux-gnu/qt5/QtCore -I/usr/include/c++/4.9 -I/usr/include/i386-linux-gnu/c++/4.9 -I/usr/include/c++/4.9/backward -I/usr/lib/gcc/i686-linux-gnu/4.9/include -I/usr/local/include -I/usr/lib/gcc/i686-linux-gnu/4.9/include-fixed -I/usr/include/i386-linux-gnu -I/usr/include loadingdialog.h -o moc_loadingdialog.cpp
+
+moc_quazipfile.cpp: quazip_global.h \
+		quazip.h \
+		zip.h \
+		ioapi.h \
+		unzip.h \
+		quazipfileinfo.h \
+		quazipnewinfo.h \
+		quazipfile.h
+	/usr/lib/i386-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -I/home/guhanjie/Workspace/streetcar/updateDemo -I/home/guhanjie/Workspace/streetcar/updateDemo -I/usr/include/i386-linux-gnu/qt5 -I/usr/include/i386-linux-gnu/qt5/QtWidgets -I/usr/include/i386-linux-gnu/qt5/QtGui -I/usr/include/i386-linux-gnu/qt5/QtSql -I/usr/include/i386-linux-gnu/qt5/QtCore -I/usr/include/c++/4.9 -I/usr/include/i386-linux-gnu/c++/4.9 -I/usr/include/c++/4.9/backward -I/usr/lib/gcc/i686-linux-gnu/4.9/include -I/usr/local/include -I/usr/lib/gcc/i686-linux-gnu/4.9/include-fixed -I/usr/include/i386-linux-gnu -I/usr/include quazipfile.h -o moc_quazipfile.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -337,7 +380,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_header_clean compiler_uic_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
 
@@ -346,8 +389,18 @@ main.o: main.cpp mainwindow.h
 
 mainwindow.o: mainwindow.cpp appconfig.h \
 		dbutils.h \
+		loadingdialog.h \
 		mainwindow.h \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		waitingdialog.h \
+		quazip.h \
+		zip.h \
+		ioapi.h \
+		unzip.h \
+		quazip_global.h \
+		quazipfileinfo.h \
+		quazipfile.h \
+		quazipnewinfo.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
 appconfig.o: appconfig.cpp appconfig.h
@@ -357,8 +410,26 @@ dbutils.o: dbutils.cpp appconfig.h \
 		dbutils.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dbutils.o dbutils.cpp
 
+waitingdialog.o: waitingdialog.cpp waitingdialog.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o waitingdialog.o waitingdialog.cpp
+
+loadingdialog.o: loadingdialog.cpp loadingdialog.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o loadingdialog.o loadingdialog.cpp
+
+qrc_resources.o: qrc_resources.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_resources.o qrc_resources.cpp
+
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+
+moc_waitingdialog.o: moc_waitingdialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_waitingdialog.o moc_waitingdialog.cpp
+
+moc_loadingdialog.o: moc_loadingdialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_loadingdialog.o moc_loadingdialog.cpp
+
+moc_quazipfile.o: moc_quazipfile.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_quazipfile.o moc_quazipfile.cpp
 
 ####### Install
 

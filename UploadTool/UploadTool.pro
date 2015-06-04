@@ -24,3 +24,10 @@ HEADERS  += mainwindow.h \
     dbutils.h
 
 FORMS    += mainwindow.ui
+
+QMAKE_LFLAGS += -Wl,-rpath=$$PWD/
+
+unix:!macx: LIBS += -L$$PWD/ -lqsqloci
+
+INCLUDEPATH += $$PWD/
+DEPENDPATH += $$PWD/

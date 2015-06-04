@@ -20,6 +20,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTextBrowser>
+#include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -37,6 +38,7 @@ public:
     QMenu *menu_F;
     QMenu *menu;
     QStatusBar *statusBar;
+    QToolBar *toolBar;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -51,6 +53,9 @@ public:
         action_C->setObjectName(QStringLiteral("action_C"));
         action_U = new QAction(MainWindow);
         action_U->setObjectName(QStringLiteral("action_U"));
+        QIcon icon;
+        icon.addFile(QStringLiteral(":/images/images/update.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        action_U->setIcon(icon);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -76,12 +81,18 @@ public:
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
         MainWindow->setStatusBar(statusBar);
+        toolBar = new QToolBar(MainWindow);
+        toolBar->setObjectName(QStringLiteral("toolBar"));
+        toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+        MainWindow->addToolBar(Qt::TopToolBarArea, toolBar);
 
         menuBar->addAction(menu_F->menuAction());
         menuBar->addAction(menu->menuAction());
         menu_F->addAction(action_O);
         menu_F->addAction(action_C);
         menu->addAction(action_U);
+        toolBar->addAction(action_U);
+        toolBar->addSeparator();
 
         retranslateUi(MainWindow);
 
@@ -108,6 +119,7 @@ public:
 #ifndef QT_NO_WHATSTHIS
         statusBar->setWhatsThis(QString());
 #endif // QT_NO_WHATSTHIS
+        toolBar->setWindowTitle(QApplication::translate("MainWindow", "toolBar", 0));
     } // retranslateUi
 
 };
