@@ -5,6 +5,6 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
     NTPUtil ntpUtil;
-    ntpUtil.ntpUpdate();
+    ntpUtil.f_System_Now();
     return a.exec();
 }

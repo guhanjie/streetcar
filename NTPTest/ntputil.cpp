@@ -37,7 +37,7 @@ void NTPUtil::connectsucess()
 
 void NTPUtil::readingDataGrams()
 {
-    qDebug("Reading...");
+    qDebug("Reading ntp data...");
     QByteArray newTime;
     QDateTime Epoch(QDate(1900, 1, 1));
     QDateTime unixStart(QDate(1970, 1, 1));
@@ -58,7 +58,8 @@ void NTPUtil::readingDataGrams()
     }
     QDateTime time;
     time.setTime_t(seconds-Epoch.secsTo(unixStart));
-    qDebug() << time.toString();
+    this->updateTime = time.toString(Qt::ISODate);
+    qDebug() << this->updateTime;
     this->udpsocket->disconnectFromHost();
     this->udpsocket->close();
 }
@@ -72,7 +73,23 @@ int NTPUtil::ntpUpdate(QString ntpServerIp, int port)
     connect(udpsocket,SIGNAL(connected()),this,SLOT(connectsucess()));
     connect(udpsocket,SIGNAL(readyRead()),this,SLOT(readingDataGrams()));
     udpsocket->connectToHost(ntpServerIp, port);
-    return system("ntpdate "+ipAddress);
+    QString ntpCmd = "ntpdate "+ipAddress;
+    //QByteArray ba = ntpCmd.toLatin1();
+    //return system(ba.data());
+    std::string str = ntpCmd.toStdString();
+    return system(str.c_str());
+}
+
+QString NTPUtil::f_System_Now(QString ntpServerIp, int port)
+{
+    QHostInfo info=QHostInfo::fromName(ntpServerIp);
+    QString ipAddress=info.addresses().first().toString();
+    qDebug()<<"ipAddress="<<ipAddress;
+    udpsocket=new QUdpSocket(this);
+    connect(udpsocket,SIGNAL(connected()),this,SLOT(connectsucess()));
+    connect(udpsocket,SIGNAL(readyRead()),this,SLOT(readingDataGrams()));
+    udpsocket->connectToHost(ntpServerIp, port);
+    return this->updateTime;
 }
 
 NTPUtil::NTPUtil()
