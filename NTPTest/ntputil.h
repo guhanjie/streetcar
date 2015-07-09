@@ -10,7 +10,7 @@ class NTPUtil : public QObject
         ~NTPUtil();
 
     public:
-        int ntpUpdate(QString ntpServerIp = "time.windows.com", int port = 123);
+        int f_System_UpdateTime(QString ntpServerIp = "time.windows.com", int port = 123);
         QString f_System_Now(QString ntpServerIp = "time.windows.com", int port = 123);
 
     private slots:

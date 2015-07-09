@@ -64,7 +64,7 @@ void NTPUtil::readingDataGrams()
     this->udpsocket->close();
 }
 
-int NTPUtil::ntpUpdate(QString ntpServerIp, int port)
+int NTPUtil::f_System_UpdateTime(QString ntpServerIp, int port)
 {
    QHostInfo info=QHostInfo::fromName(ntpServerIp);
    QString ipAddress=info.addresses().first().toString();
