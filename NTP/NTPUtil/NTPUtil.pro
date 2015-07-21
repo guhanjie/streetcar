@@ -8,7 +8,7 @@ QT       += core network
 
 QT       -= gui
 
-TARGET = NTPTest
+TARGET = NTPUtil
 CONFIG   += console
 CONFIG   -= app_bundle
 
